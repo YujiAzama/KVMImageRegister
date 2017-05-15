@@ -1,0 +1,25 @@
+<domain type='kvm'>
+  <name>image-name</name>
+  <memory unit='KiB'>memory-size</memory>
+  <currentMemory unit='KiB'>memory-size</currentMemory>
+  <vcpu placement='static'>2</vcpu>
+  <os>
+    <type arch='x86_64' machine='pc-i440fx-xenial'>hvm</type>
+  </os>
+  <devices>
+    <emulator>/usr/bin/kvm-spice</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='/opt/libvirt/images/image-name.qcow2'/>
+      <target dev='sda' bus='sata'/>
+      <boot order='1'/>
+      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+    </disk>
+    <interface type='network'>
+      <source network='default'/>
+      <model type='rtl8139'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+    </interface>
+    <graphics type='vnc' port='vnc-port'/>
+  </devices>
+</domain>
