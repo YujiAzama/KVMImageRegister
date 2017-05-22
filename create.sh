@@ -68,8 +68,16 @@ sleep 10
 
 MAC=$(virsh dumpxml ${IMAGE_NAME} | grep "mac address" | awk '{print $2}' | sed -e "s/address='//g" -e "s#'/>##g")
 
+RES=`virsh net-dhcp-leases default | grep $MAC`
+while :
+do
+  if [ "$RES" ]; then
+    break
+  fi
+  sleep 1
+  RES=`virsh net-dhcp-leases default | grep $MAC`
+done
 echo "Image creating is Successful. New VM Info is below:"
-RES=$(virsh net-dhcp-leases default | grep $MAC)
 arr=($RES)
 CREATE_DATE=${arr[0]}" "${arr[1]}
 MAC_ADDR=${arr[2]}
