@@ -65,3 +65,7 @@ Welcome to Ubuntu 16.04.2 LTS (GNU/Linux 4.4.0-62-generic x86_64)
 Last login: Mon May 15 09:18:01 2017
 ubuntu@ubuntu:~$
 ```
+
+### Login to the VM using SSH
+
+You can login to the VM. Default user name is "ubuntu", and default password is "password".
