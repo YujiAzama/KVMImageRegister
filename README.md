@@ -5,6 +5,14 @@
 KVMImageRegister is the tool for create and define VM that is environment for testing.
 You can create KVM image very easy and fastly if you use KVMImageRegister.
 
+## Dependency install
+
+You must install deoendency packages as follow:
+
+```bash
+$ sudo apt install qemu-kvm libvirt-bin dnsmasq
+```
+
 ## Usage
 
 You can clone KVMImageRegister as follows:
