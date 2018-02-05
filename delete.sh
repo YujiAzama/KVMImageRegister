@@ -22,4 +22,9 @@ virsh destroy ${IMAGE}
 
 virsh undefine ${IMAGE}
 
+sed -i '/'${IMAGE}'/d' /var/lib/libvirt/dnsmasq/default.addnhosts
+sed -i '/'${IMAGE}'/d' /etc/hosts
+
+rm ${IMAGES[${NUM}]}.xml
+
 echo "Image Deleting is Successful."

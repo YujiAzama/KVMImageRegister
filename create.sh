@@ -44,18 +44,6 @@ read MEMORY_SIZE
 sed -i -e "s/memory-size/$((1024*1024*${MEMORY_SIZE}))/g" ${IMAGE_NAME}.xml
 echo
 
-# VNC Port
-echo "[Step4]Input VNC port number of new VM."
-echo -n "  Used Ports: ["
-for item in ${arr[@]}; do
-  echo -n $(virsh dumpxml $item | grep vnc | awk '{print $3}' | sed -e "s/port=//g" -e "s/'//g")", "
-done
-echo "]"
-echo -n "VPC Port: "
-read VNC_PORT
-sed -i -e "s/vnc-port/${VNC_PORT}/g" ${IMAGE_NAME}.xml
-echo
-
 # Create base image from splite pieces.
 echo "Creating VM..."
 mkdir -p /opt/libvirt/images
@@ -81,11 +69,16 @@ echo "Image creating is Successful. New VM Info is below:"
 arr=($RES)
 CREATE_DATE=${arr[0]}" "${arr[1]}
 MAC_ADDR=${arr[2]}
-IP_ADDR=${arr[4]}
-HOST_NAME=${arr[5]}
+IP_ADDR=${arr[4]/\/*/}
+DEFAULT_USER_NAME=${arr[5]}
 echo
 echo "  Create Date : "${CREATE_DATE}
 echo "  MAC Address : "${MAC_ADDR}
 echo "  IP Address  : "${IP_ADDR}
-echo "  Host Name   : "${HOST_NAME}
+echo "  Host Name   : "${IMAGE_NAME}
+echo "  Default User Name   : "${DEFAULT_USER_NAME}
 echo
+
+echo "Add host name to /etc/hosts"
+sed -i '1i '"${IP_ADDR} ${IMAGE_NAME}" /var/lib/libvirt/dnsmasq/default.addnhosts
+sed -i '1i '"${IP_ADDR} ${IMAGE_NAME}" /etc/hosts
