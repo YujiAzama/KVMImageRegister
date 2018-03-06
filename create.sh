@@ -49,6 +49,14 @@ echo "Creating VM..."
 mkdir -p /opt/libvirt/images
 cat images/${BASE_IMAGE}/image-piece.* > /opt/libvirt/images/${IMAGE_NAME}.qcow2
 
+modprobe nbd
+qemu-nbd --connect=/dev/nbd0 /opt/libvirt/images/${IMAGE_NAME}.qcow2
+mount /dev/nbd0p1 /mnt
+sed -i -e "s/ubuntu/${IMAGE_NAME}/g" /mnt/etc/hostname
+sed -i -e "s/ubuntu/${IMAGE_NAME}/g" /mnt/etc/hosts
+umount /mnt
+qemu-nbd --disconnect /dev/nbd0 > /dev/null
+
 virsh define ${IMAGE_NAME}.xml
 virsh start ${IMAGE_NAME}
 
@@ -70,7 +78,7 @@ arr=($RES)
 CREATE_DATE=${arr[0]}" "${arr[1]}
 MAC_ADDR=${arr[2]}
 IP_ADDR=${arr[4]/\/*/}
-DEFAULT_USER_NAME=${arr[5]}
+DEFAULT_USER_NAME=ubuntu
 echo
 echo "  Create Date : "${CREATE_DATE}
 echo "  MAC Address : "${MAC_ADDR}
